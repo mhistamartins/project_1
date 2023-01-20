@@ -85,6 +85,51 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 .PHONY : rebuild_cache/fast
 
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+.PHONY : list_install_components/fast
+
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/opt/homebrew/Cellar/cmake/3.25.1/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/opt/homebrew/Cellar/cmake/3.25.1/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/opt/homebrew/Cellar/cmake/3.25.1/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/opt/homebrew/Cellar/cmake/3.25.1/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/opt/homebrew/Cellar/cmake/3.25.1/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/opt/homebrew/Cellar/cmake/3.25.1/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
+
 # The main all target
 all: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/aboycandream/dev/project_1/project_1/file_io/build/CMakeFiles /Users/aboycandream/dev/project_1/project_1/file_io/build//CMakeFiles/progress.marks
@@ -117,65 +162,167 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named project_cmake
+# Target rules for targets named project_file_lib
 
 # Build rule for target.
-project_cmake: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 project_cmake
-.PHONY : project_cmake
+project_file_lib: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 project_file_lib
+.PHONY : project_file_lib
 
 # fast build rule for target.
-project_cmake/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/project_cmake.dir/build.make CMakeFiles/project_cmake.dir/build
-.PHONY : project_cmake/fast
+project_file_lib/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/project_file_lib.dir/build.make CMakeFiles/project_file_lib.dir/build
+.PHONY : project_file_lib/fast
 
-project.o: project.cpp.o
-.PHONY : project.o
+#=============================================================================
+# Target rules for targets named projectApp
+
+# Build rule for target.
+projectApp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 projectApp
+.PHONY : projectApp
+
+# fast build rule for target.
+projectApp/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/projectApp.dir/build.make CMakeFiles/projectApp.dir/build
+.PHONY : projectApp/fast
+
+#=============================================================================
+# Target rules for targets named lib_ut_tests
+
+# Build rule for target.
+lib_ut_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lib_ut_tests
+.PHONY : lib_ut_tests
+
+# fast build rule for target.
+lib_ut_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_ut_tests.dir/build.make CMakeFiles/lib_ut_tests.dir/build
+.PHONY : lib_ut_tests/fast
+
+#=============================================================================
+# Target rules for targets named gmock
+
+# Build rule for target.
+gmock: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gmock
+.PHONY : gmock
+
+# fast build rule for target.
+gmock/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/build.make _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/build
+.PHONY : gmock/fast
+
+#=============================================================================
+# Target rules for targets named gmock_main
+
+# Build rule for target.
+gmock_main: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gmock_main
+.PHONY : gmock_main
+
+# fast build rule for target.
+gmock_main/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/build.make _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/build
+.PHONY : gmock_main/fast
+
+#=============================================================================
+# Target rules for targets named gtest
+
+# Build rule for target.
+gtest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest
+.PHONY : gtest
+
+# fast build rule for target.
+gtest/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest.dir/build
+.PHONY : gtest/fast
+
+#=============================================================================
+# Target rules for targets named gtest_main
+
+# Build rule for target.
+gtest_main: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest_main
+.PHONY : gtest_main
+
+# fast build rule for target.
+gtest_main/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build
+.PHONY : gtest_main/fast
+
+app/src/test.o: app/src/test.cpp.o
+.PHONY : app/src/test.o
 
 # target to build an object file
-project.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/project_cmake.dir/build.make CMakeFiles/project_cmake.dir/project.cpp.o
-.PHONY : project.cpp.o
+app/src/test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/projectApp.dir/build.make CMakeFiles/projectApp.dir/app/src/test.cpp.o
+.PHONY : app/src/test.cpp.o
 
-project.i: project.cpp.i
-.PHONY : project.i
+app/src/test.i: app/src/test.cpp.i
+.PHONY : app/src/test.i
 
 # target to preprocess a source file
-project.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/project_cmake.dir/build.make CMakeFiles/project_cmake.dir/project.cpp.i
-.PHONY : project.cpp.i
+app/src/test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/projectApp.dir/build.make CMakeFiles/projectApp.dir/app/src/test.cpp.i
+.PHONY : app/src/test.cpp.i
 
-project.s: project.cpp.s
-.PHONY : project.s
+app/src/test.s: app/src/test.cpp.s
+.PHONY : app/src/test.s
 
 # target to generate assembly for a file
-project.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/project_cmake.dir/build.make CMakeFiles/project_cmake.dir/project.cpp.s
-.PHONY : project.cpp.s
+app/src/test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/projectApp.dir/build.make CMakeFiles/projectApp.dir/app/src/test.cpp.s
+.PHONY : app/src/test.cpp.s
 
-test.o: test.cpp.o
-.PHONY : test.o
+lib/UT/gtest.o: lib/UT/gtest.cpp.o
+.PHONY : lib/UT/gtest.o
 
 # target to build an object file
-test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/project_cmake.dir/build.make CMakeFiles/project_cmake.dir/test.cpp.o
-.PHONY : test.cpp.o
+lib/UT/gtest.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_ut_tests.dir/build.make CMakeFiles/lib_ut_tests.dir/lib/UT/gtest.cpp.o
+.PHONY : lib/UT/gtest.cpp.o
 
-test.i: test.cpp.i
-.PHONY : test.i
+lib/UT/gtest.i: lib/UT/gtest.cpp.i
+.PHONY : lib/UT/gtest.i
 
 # target to preprocess a source file
-test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/project_cmake.dir/build.make CMakeFiles/project_cmake.dir/test.cpp.i
-.PHONY : test.cpp.i
+lib/UT/gtest.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_ut_tests.dir/build.make CMakeFiles/lib_ut_tests.dir/lib/UT/gtest.cpp.i
+.PHONY : lib/UT/gtest.cpp.i
 
-test.s: test.cpp.s
-.PHONY : test.s
+lib/UT/gtest.s: lib/UT/gtest.cpp.s
+.PHONY : lib/UT/gtest.s
 
 # target to generate assembly for a file
-test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/project_cmake.dir/build.make CMakeFiles/project_cmake.dir/test.cpp.s
-.PHONY : test.cpp.s
+lib/UT/gtest.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_ut_tests.dir/build.make CMakeFiles/lib_ut_tests.dir/lib/UT/gtest.cpp.s
+.PHONY : lib/UT/gtest.cpp.s
+
+lib/src/project.o: lib/src/project.cpp.o
+.PHONY : lib/src/project.o
+
+# target to build an object file
+lib/src/project.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/project_file_lib.dir/build.make CMakeFiles/project_file_lib.dir/lib/src/project.cpp.o
+.PHONY : lib/src/project.cpp.o
+
+lib/src/project.i: lib/src/project.cpp.i
+.PHONY : lib/src/project.i
+
+# target to preprocess a source file
+lib/src/project.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/project_file_lib.dir/build.make CMakeFiles/project_file_lib.dir/lib/src/project.cpp.i
+.PHONY : lib/src/project.cpp.i
+
+lib/src/project.s: lib/src/project.cpp.s
+.PHONY : lib/src/project.s
+
+# target to generate assembly for a file
+lib/src/project.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/project_file_lib.dir/build.make CMakeFiles/project_file_lib.dir/lib/src/project.cpp.s
+.PHONY : lib/src/project.cpp.s
 
 # Help Target
 help:
@@ -184,14 +331,27 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... install"
+	@echo "... install/local"
+	@echo "... install/strip"
+	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... project_cmake"
-	@echo "... project.o"
-	@echo "... project.i"
-	@echo "... project.s"
-	@echo "... test.o"
-	@echo "... test.i"
-	@echo "... test.s"
+	@echo "... gmock"
+	@echo "... gmock_main"
+	@echo "... gtest"
+	@echo "... gtest_main"
+	@echo "... lib_ut_tests"
+	@echo "... projectApp"
+	@echo "... project_file_lib"
+	@echo "... app/src/test.o"
+	@echo "... app/src/test.i"
+	@echo "... app/src/test.s"
+	@echo "... lib/UT/gtest.o"
+	@echo "... lib/UT/gtest.i"
+	@echo "... lib/UT/gtest.s"
+	@echo "... lib/src/project.o"
+	@echo "... lib/src/project.i"
+	@echo "... lib/src/project.s"
 .PHONY : help
 
 
