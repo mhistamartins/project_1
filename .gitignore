@@ -1,0 +1,18 @@
+#we ignore the folder "build"
+build/
+
+#we also ignore build inside sub directories
+**/build/
+
+#we ignore object files and generated libraries
+*.o
+*.obj
+*.a
+
+#let's ignore vscode folder
+.vscode/
+
+#if you want to ignore specific files
+**/todo.md/
+
+#hopefully it works...
