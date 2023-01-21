@@ -22,7 +22,11 @@ jobs:
       - name: Install prerequisites
         run: sudo apt-get install -y cmake build-essential
       - name: build the code
-        run: echo "building..."
+        run:  |
+          mkdir build
+          cd build
+          cmake ../file_io
+          cmake --build .
       - name: run tests
         run: echo "testing..."
       
