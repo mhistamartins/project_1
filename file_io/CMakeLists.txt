@@ -36,5 +36,5 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 #Download or check that googletest is downloaded:
 FetchContent_MakeAvailable(googletest)
 
-add_executable(lib_ut_tests lib/ut/gtest.cpp)
-target_link_libraries(lib_ut_tests gtest gtest_main)
+add_executable(lib_ut_tests lib/ut/gtest.cpp lib/ut/ut_lib_tests.cpp)
+target_link_libraries(lib_ut_tests gtest gtest_main project_file_lib)
