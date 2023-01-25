@@ -1,3 +1,25 @@
 Improved_randomfile one
 Improved_randomfile two
 Improved_randomfile three
+
+#python program to read Json file
+
+import json
+
+#import json
+#opening JSON file
+
+f = open('min_signals.json',)
+
+#returns JSON object as
+#a dictionary
+
+data = json.load(f)
+
+#iterating through the json
+#list
+
+for i in data ['emp_details']:
+    print(i)
+
+#closing file
