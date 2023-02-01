@@ -9,16 +9,18 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    project network;
+    FileWork project_fileio("TextFile.txt");
 
-   network.open();
+    project_fileio.open();
 
-   // network.write_container();
-   //network.read_container();
-   network.func_write_line_string();
-   network.func_read_line_string1();
+    std::string write;
+    std::cout << "Enter line of strings: ";
+    std::getline(std::cin, write);
 
-   network.close();
+    project_fileio.func_write_line_string(write);
+    project_fileio.func_read_line_string();
 
-   return 0;
+    std::vector<std::string> ReadContainer = project_fileio.read_container();
+
+    return 0;
 }

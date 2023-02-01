@@ -7,130 +7,62 @@
 
 using namespace std;
 
-project::project() {}
+FileWork::FileWork(const std::string &FileName) : FileName(FileName) {}
 
-project::~project() {}
-
-void project::open()
+bool FileWork::open()
 {
-    fstream myFile;
-    myFile.open("TextFile.txt", ios::out);
-    if (myFile.is_open())
+    bool status{false};
+    Files.open(FileName, ios::out | ios::in | ios::app);
+    File.open(FileName, ios::out | ios::in | ios::app);
+    if (Files.is_open() && File.is_open())
     {
-        cout << "File has been opened\n";
+        std::cout << "File is opened" << std::endl;
+
+        status = true;
     }
-    else if (!myFile.is_open())
-    {
-        std::cout << "File does not exist. New file created.";
-    }
+    return false;
 }
 
-void project::close()
+void FileWork::func_write_line_string(const std::string &write)
 {
-    fstream myFile;
-    myFile.close();
-    std::cout << "File is closed" << std::endl;
+    Files.open(FileName);
+    Files << "writing this line of code to file" << std::endl;
 }
 
-int project::func_read_line_string1(void)
+std::string FileWork::func_read_line_string()
 {
-    ifstream file;
-
-    string filename;
-    int line_number;
-
-    cout << "Please enter Filename: ";
-    cin >> filename;
-
-    cout << "Line: ";
-
-    cin >> line_number;
-
-    if (line_number <= 0)
+    string data[1];
+    int num;
+    std::cout << "specify line of file:" << std::endl;
+    cin >> num;
+    for (int i = 0; i < num; i++)
     {
-        cout << "Line number must be >= 1" << endl;
-
-        return 1;
+        getline(File, data[0]);
     }
-
-    file.open(filename);
-
-    if (file.fail())
-    {
-        cout << "File failed to open." << endl;
-        return 1;
-    }
-
-    int current_line = 0;
-    string line;
-
-    while (!file.eof())
-    {
-        current_line++;
-
-        getline(file, line);
-
-        if (current_line == line_number)
-            break;
-    }
-    if (current_line < line_number)
-    {
-        cout << "Line not found!" << endl;
-        cout << "File contains " << current_line;
-        cout << " lines total." << endl;
-    }
-
-    else
-        cout << "Line: " << line << endl;
-
-    file.close();
-
-    return 0;
+    return data[0];
 }
 
-int project::func_write_line_string()
+std::vector<std::string> FileWork::read_container()
 {
-    ofstream myfile("TextFile.txt");
-    if (myfile.is_open())
-    {
-        myfile << "This is a line.\n";
-    }
-    else
-        cout << "Unable to open file\n";
-
-    return 0;
-}
-
-int project::read_container()
-{
-    std::ifstream file("TextFile.txt");
-
-    std::vector<std::string> v;
-
+    std::vector<std::string> vec;
     std::string str;
-    while (file >> str) // keep reading until we run out
+    while (getline(File, str))
     {
-        v.push_back(str);
+        vec.push_back(str);
     }
-
-    copy(v.begin(), v.end(), ostream_iterator<string>(cout, " "));
-    std::cout << "\n";
-
-    return 0;
+    return vec;
 }
 
-void project::write_container()
+void FileWork::write_container(const std::vector<std::string> &writecont)
 {
-    vector<string> myvector;
-    string str;
-
-    cout << "Please enter strings: \n";
-    getline(cin, str);
-    myvector.push_back(str);
-
-    for (int i = 0; i < myvector.size(); i++)
+    for (const auto &write : writecont)
     {
-        cout << "Your strings are: \n"
-             << myvector[i] << endl;
+        Files << write << std::endl;
     }
+}
+
+void FileWork::close()
+{
+    File.close();
+    Files.close();
 }
