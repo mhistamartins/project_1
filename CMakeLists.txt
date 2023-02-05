@@ -3,7 +3,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 PROJECT(PoC) #proof of concept
 
 add_subdirectory(file_io)
-add_subdirectory(can_messages)
+add_subdirectory(CAN_messages)
 
 message(STATUS "Generated Include path = ${CAN_INCLUDE_DIR}),sources= ${CAN_SOURCES}")
 
