@@ -14,6 +14,7 @@ def gen_include_guard_class_decl_ctor(json_filename):
 
     top.append(f'#ifndef {include_guard_name}\n')
     top.append(f'#define {include_guard_name}')
+    top.append(f'\n#include <string>')
     top.append('\n\n')
     top.append(f'class CAN_{json_filename} {{\n')
     top.append('\tpublic:\n')
