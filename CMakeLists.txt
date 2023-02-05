@@ -5,6 +5,6 @@ PROJECT(PoC) #proof of concept
 add_subdirectory(file_io)
 add_subdirectory(can_messages)
 
-message(STATUS "Generated Include path = ${CAN_INCLUDE_DIR} , sources = ${CAN_SOURCES}")
+message(STATUS "Generated Include path = ${CAN_INCLUDE_DIR}),sources= ${CAN_SOURCES}")
 
 add_subdirectory(main_component)
