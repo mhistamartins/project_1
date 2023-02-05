@@ -4,9 +4,10 @@ project(project CXX)
 
 #tells to CMake to search for header files in lib/include folder
 include_directories(lib/include)
+set(FILE_IO_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/include PARENT_SCOPE)
 
 set(sourcesLib lib/src/project.cpp)
-set(sourcesApp app/src/test.cpp)
+set(sourcesApp app/src/file_io_main.cpp)
 
 
 #we are telling to cmake to build a library from source code

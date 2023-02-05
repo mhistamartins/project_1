@@ -7,4 +7,4 @@ add_executable(main_component ${SOURCES} ${CAN_SOURCES})
 
 add_dependencies(main_component generate_sources_from_json)
 
-target_link_libraries(main_component file_io_lib)
+target_link_libraries(main_component project_file_lib)
