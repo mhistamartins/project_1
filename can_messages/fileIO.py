@@ -1,5 +1,6 @@
 import json
 
+
 def write_output(filename, data):
     with open(filename, "w") as file_fd:
         file_fd.writelines(data)
@@ -7,7 +8,7 @@ def write_output(filename, data):
 
 def gen_include_guard_class_decl_ctor(json_filename):
     top = []
-    bottom = "" 
+    bottom = ""
 
     json_name_upper = json_filename.upper()
     include_guard_name = f'HEADER_{json_name_upper}_H'
@@ -58,10 +59,10 @@ def generate_get_set_functions(json_dict):
 def generate_private_fields(json_dict):
     content = []
     data_type = "uint8_t"
-    content.append(f'\n\t\t{data_type} m_startMsgID;\n')
+    content.append(f'\n\t\t{data_type} m_startMsgId;\n')
     for element in json_dict["signals"]:
-        content.append(f'\t\t{data_type} m_{element["name"]}GetMsgID;\n')
-        content.append(f'\t\t{data_type} m_{element["name"]}SetMsgID;\n')
+        content.append(f'\t\t{data_type} m_{element["name"]}GetMsgId;\n')
+        content.append(f'\t\t{data_type} m_{element["name"]}SetMsgId;\n')
 
     return content
 
@@ -86,7 +87,9 @@ def write_header_file(filename, data):
     with open(filename, 'w') as file_fP:
         file_fP.writelines(data)
 
-#back here
+# back here
+
+
 def gen_incl_guard_src(json_filename):
     top = []
     bottom = ""
@@ -94,7 +97,8 @@ def gen_incl_guard_src(json_filename):
     json_filename_lower = json_filename.lower()
     start_msg_id = "m_startMsgId"
     data_id = json_dict["id"]
-    top.append(f'#include "../include/can_messages/CAN_{json_filename_lower}.h"\n')
+    top.append(
+        f'#include "../include/can_messages/CAN_{json_filename_lower}.h"\n')
     top.append(f'#include <sstream>\n\n')
     top.append(f'CAN_{json_filename_lower}::CAN_{json_filename_lower}() {{\n')
     top.append(f'\t{start_msg_id} = {data_id};\n')
@@ -111,14 +115,16 @@ def gen_incl_guard_src(json_filename):
         elem_name = element["name"]
         elem_type = element["type"]
         elem_len = element["length"]
-        top.append(f'std::string CAN_{json_filename_lower}::get_{elem_name}() {{\n')
+        top.append(
+            f'std::string CAN_{json_filename_lower}::get_{elem_name}() {{\n')
         top.append(f'\tstd::stringstream sstream; \n')
         top.append(f'\tsstream << "{{\\"ID\\": " << m_{elem_name}GetMsgId\n')
         top.append(f'\t\t\t<< ", \\"length\\":0 "\n')
         top.append(f'\t\t\t<< ", \\"value\\": \\"\\" }}";\n')
         top.append(f'\treturn sstream.str();\n')
         top.append(f'}}\n')
-        top.append(f'std::string CAN_{json_filename_lower}::set_{elem_name}({elem_type} newValue) {{\n')
+        top.append(
+            f'std::string CAN_{json_filename_lower}::set_{elem_name}({elem_type} newValue) {{\n')
         top.append(f'\tstd::stringstream sstream;\n')
         top.append(f'\tsstream << "{{\\"ID\\": " << m_{elem_name}GetMsgId\n')
         top.append(f'\t\t\t<< ", \\"length\\":{elem_len} "\n')

@@ -1,6 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
-PROJECT(PoC) #proof of concept
+PROJECT(PoC) #proof of concept 
+set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(file_io)
 add_subdirectory(can_messages)

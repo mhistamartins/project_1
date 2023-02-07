@@ -11,7 +11,7 @@ FileWork::FileWork(const std::string &FileName) : FileName(FileName) {}
 
 bool FileWork::open()
 {
-    bool status{false};
+    bool status = false;
     Files.open(FileName, ios::out | ios::in | ios::app);
     File.open(FileName, ios::out | ios::in | ios::app);
     if (Files.is_open() && File.is_open())
