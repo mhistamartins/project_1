@@ -1,5 +1,5 @@
-add_custom_target(
-    generate_sources_from_json
+execute_process(
+    #generate_sources_from_json
     COMMAND "python3" "fileIO.py"  #change filename/path later
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )

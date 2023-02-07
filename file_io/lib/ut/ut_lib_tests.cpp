@@ -2,7 +2,7 @@
 #include "project.h"
 #include <fstream>
 
-/* List of Test cases to implement:
+/* List of Test cases to implement :
 1. Read Line From file, which doesn't exist,'
    throws an Exception
 2. Read Lines (all content) From file,
