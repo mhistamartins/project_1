@@ -1,0 +1,271 @@
+project.cpp
+
+
+#include "project.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <iterator>
+
+using namespace std;
+
+FileWork::FileWork(const std::string FileName) 
+{ m_fileName = FileName; }
+
+bool FileWork::open(bool to_write = false)
+{
+    bool status = false;
+    if(to_write)
+    {
+        // output stream
+        Files.open(FileName, ios::out); // optionally -> add a flag ios::app
+        if (Files.is_open())
+        {
+            std::cout << "File is opened" << std::endl;
+            status = true;
+        }
+    }
+    else
+    {
+        // input stream
+        File.open(FileName, ios::in);
+        if (File.is_open())
+        {
+            std::cout << "File is opened" << std::endl;
+            status = true;
+        }
+    }
+    return status;
+}
+
+void FileWork::func_write_line_string(const std::string &write)
+{
+    open(true);
+    Files << "writing this line of code to file" << std::endl;
+}
+
+std::string FileWork::func_read_line_string()
+{
+    open(false);
+    string data[1];
+    int num;
+    std::cout << "specify line of file:" << std::endl;
+    cin >> num;
+    for (int i = 0; i < num; i++)
+    {
+        getline(File, data[0]);
+    }
+    return data[0];
+}
+
+std::vector<std::string> FileWork::read_container()
+{
+    open(false);
+    std::vector<std::string> vec;
+    std::string str;
+    while (getline(File, str))
+    {
+        vec.push_back(str);
+    }
+    return vec;
+}
+
+void FileWork::write_container(const std::vector<std::string> &writecont)
+{
+    open(true);
+    for (const auto &write : writecont)
+    {
+        Files << write << std::endl;
+    }
+}
+
+void FileWork::close()
+{
+    File.close();
+    Files.close();
+}
+
+.....................................
+
+project.header
+
+
+#ifndef PROJECT_H
+#define PROJECT_H
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <vector>
+
+class FileWork
+{
+private:
+    std::string FileName;
+    std::ofstream Files;
+    std::ifstream File;
+
+public:
+    explicit FileWork(const std::string &FileName);
+
+    bool open(bool to_write);
+    void func_write_line_string(const std::string &write);
+    std::string func_read_line_string();
+    std::vector<std::string> read_container();
+    void write_container(const std::vector<std::string> &writecont);
+
+    void close();
+
+    ~FileWork() {}
+};
+#endif
+
+.................................
+
+main.cpp
+
+
+#include "project.h"
+#include <iostream>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <iterator>
+
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+    FileWork project_fileio("TextFile.txt");
+
+    project_fileio.open(true);
+    project_fileio.open(false);
+
+    std::string write;
+    std::cout << "Enter line of strings: ";
+    std::getline(std::cin, write);
+
+    project_fileio.func_write_line_string(write);
+
+    
+    project_fileio.func_read_line_string();
+    std::vector<std::string> Inputs;
+    std::string Input;
+    std::cout << "Enter the Lines to be written in the file:" << std::endl;
+    std::getline(std::cin >> ws, Input);
+    Inputs.push_back(Input);
+    for (int i = 0; i < Inputs.size(); i++)
+        std::cout << "Strings: \n"
+                  << Inputs[i] << std::endl;
+
+   
+    std::vector<std::string> ReadContainer = project_fileio.read_container();
+    for (const auto &str : Inputs)
+    {
+        std::cout << str << std::endl;
+
+    }
+
+    project_fileio.close();
+
+    return 0;
+}
+
+
+main component
+
+
+#include <can_messages/CAN_min_signals.h>
+#include "project.h"
+#include <iostream>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <iterator>
+
+using namespace std;
+std::string parse_get_func_and_call(std::string line)
+{
+    std::string result;
+    return result;
+} // set volume 100
+std::string parse_set_func_and_call(std::string line)
+{
+    const std::string set_keyword("set");
+    std::string result("TODO: FIX IT");
+    size_t pos_of_set = line.find(set_keyword);
+    size_t pos_start_signal_name = pos_of_set + set_keyword.size() + 1;
+    // position of set plus the length of the "set" string plus extra whitespace
+    size_t pos_of_separator = line.find(" ", pos_start_signal_name);
+    std::string signal_name = line.substr(pos_start_signal_name, pos_of_separator - pos_start_signal_name); // ignore space we use +1
+    // starting from the first symbol after
+    // from total length -(position of first element + last element)
+    std::string value = line.substr(pos_of_separator + 1, line.length() - ((pos_of_separator + 1) + 1));
+    std::cout << value.length() << std::endl;
+    std::cout << "signal_name = |" << signal_name << "| value = |" << value << "|" << std::endl;
+    if (signal_name.compare("temperature") == 0)
+    {
+        float f_value = std::stof(value);
+        CAN_min_signals signal_obj;
+        return signal_obj.set_temperature(f_value);
+    }
+    else if (signal_name.compare("humidity") == 0)
+    {
+        uint8_t u_value = std::stoul(value) & 0xFF; // to take only the last byte so we use the & bitwise operator
+        CAN_min_signals signal_obj;
+        return signal_obj.set_humidity(u_value);
+    }
+
+    return result;
+}
+/*
+ convert list of commands into json file using generated class from CAN_messages*/
+std::vector<std::string> convert(std::vector<std::string> raw_input)
+{
+    std::vector<std::string> output;
+    for (std::string &line : raw_input)
+    {
+        size_t pos_of_get = line.find("get");
+        if (pos_of_get != std::string::npos && pos_of_get < 2) // npos is returns -1
+        {
+            // call a function to parse "get" lines.
+            std::string out = parse_get_func_and_call(line);
+            output.push_back(out);
+        }
+        size_t pos_of_set = line.find("set");
+        if (pos_of_set != std::string::npos && pos_of_set < 2)
+        {
+            // call a function to parse "set" lines.
+            std::string out = parse_set_func_and_call(line);
+            output.push_back(out);
+        }
+    }
+    return output;
+}
+int main(int argc, char *argv[])
+{
+    if (argc < 2)
+    {
+        std::cerr << "You should call" << std::endl
+                  << argv[0] << "input_file output_file" << std::endl;
+        return 1;
+    }
+    std::string input_filename(argv[1]);
+    std::string output_filename(argv[2]);
+    File_IO input(input_filename);
+    std::vector<std::string> input_content = input.readLines();
+    std::vector<std::string> output_content = convert(input_content); // to get an output    // opening of the json output text file
+    std::vector<std::string> final_output = {"{", "\t["};
+    auto lineit = output_content.begin();
+    for (; std::next(lineit) != output_content.end(); ++lineit)
+    {
+        final_output.push_back(*lineit);
+    }
+    final_output.push_back((*lineit) + ","); // closing the json ouput file
+    final_output.emplace_back("\t]");
+    final_output.emplace_back("}");
+
+    File_IO output(output_filename);
+    output.writeLines(final_output);
+    return 0;
+}

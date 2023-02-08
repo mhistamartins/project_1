@@ -1,68 +1,66 @@
 #include "project.h"
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <vector>
-#include <iterator>
+#include <stdexcept>
+#include <fstream>
 
-using namespace std;
-
-FileWork::FileWork(const std::string &FileName) : FileName(FileName) {}
-
-bool FileWork::open()
+File_IO::File_IO(std::string filename)
 {
-    bool status = false;
-    Files.open(FileName, ios::out | ios::in | ios::app);
-    File.open(FileName, ios::out | ios::in | ios::app);
-    if (Files.is_open() && File.is_open())
+    m_filename = filename;
+}
+
+std::string File_IO::readLine()
+{
+    std::string content;
+
+    /* open file using m_filename variable*/
+    // read operation
+    // close file
+
+    return content;
+}
+
+std::vector<std::string> File_IO::readLines()
+{
+    std::vector<std::string> content;
+
+    const int buffer_size = 256;
+    std::ifstream input_stream(m_filename);
+    if (input_stream.is_open())
     {
-        std::cout << "File is opened" << std::endl;
+        while (input_stream.good())
+        {
+            char buffer[buffer_size] = {0};
 
-        status = true;
+            input_stream.getline(buffer, buffer_size - 1);
+            content.emplace_back(buffer);
+        }
     }
-    return false;
+
+    input_stream.close();
+
+    return content;
 }
 
-void FileWork::func_write_line_string(const std::string &write)
+void File_IO::writeLine(std::string data_line)
 {
-    Files.open(FileName);
-    Files << "writing this line of code to file" << std::endl;
+    /* open file using m_filename variable*/
+
+    // write operation
+
+    // close file
 }
 
-std::string FileWork::func_read_line_string()
+void File_IO::writeLines(std::vector<std::string> data)
 {
-    string data[1];
-    int num;
-    std::cout << "specify line of file:" << std::endl;
-    cin >> num;
-    for (int i = 0; i < num; i++)
+    std::ofstream output_stream(m_filename, std::ios::out);
+    if (output_stream.is_open())
     {
-        getline(File, data[0]);
+        for (std::string eachLine : data)
+        {
+            output_stream << eachLine << std::endl;
+        }
     }
-    return data[0];
-}
 
-std::vector<std::string> FileWork::read_container()
-{
-    std::vector<std::string> vec;
-    std::string str;
-    while (getline(File, str))
-    {
-        vec.push_back(str);
-    }
-    return vec;
-}
-
-void FileWork::write_container(const std::vector<std::string> &writecont)
-{
-    for (const auto &write : writecont)
-    {
-        Files << write << std::endl;
-    }
-}
-
-void FileWork::close()
-{
-    File.close();
-    Files.close();
+    output_stream.close();
+    // close file
 }

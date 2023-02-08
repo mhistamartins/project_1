@@ -1,11 +1,5 @@
 import json
 
-
-def write_output(filename, data):
-    with open(filename, "w") as file_fd:
-        file_fd.writelines(data)
-
-
 def gen_include_guard_class_decl_ctor(json_filename):
     top = []
     bottom = ""
@@ -87,7 +81,6 @@ def write_header_file(filename, data):
     with open(filename, 'w') as file_fP:
         file_fP.writelines(data)
 
-# back here
 
 
 def gen_incl_guard_src(json_filename):
@@ -97,8 +90,7 @@ def gen_incl_guard_src(json_filename):
     json_filename_lower = json_filename.lower()
     start_msg_id = "m_startMsgId"
     data_id = json_dict["id"]
-    top.append(
-        f'#include "../include/can_messages/CAN_{json_filename_lower}.h"\n')
+    top.append(f'#include <can_messages/CAN_{json_filename_lower}.h>\n')
     top.append(f'#include <sstream>\n\n')
     top.append(f'CAN_{json_filename_lower}::CAN_{json_filename_lower}() {{\n')
     top.append(f'\t{start_msg_id} = {data_id};\n')
@@ -129,9 +121,8 @@ def gen_incl_guard_src(json_filename):
         top.append(f'\tsstream << "{{\\"ID\\": " << m_{elem_name}GetMsgId\n')
         top.append(f'\t\t\t<< ", \\"length\\":{elem_len} "\n')
         top.append(f'\t\t\t<< ", \\"value\\":\\""\n')
-        top.append(f'\t\t\t<< ", \\"value\\":\\""\n')
         top.append(f'\t\t\t<< newValue\n')
-        top.append(f'\t\t\t<< \"}}";\n')
+        top.append(f'\t\t\t<< "\\"}}";\n')
         top.append(f'\treturn sstream.str();\n')
         top.append(f'}}\n')
 
@@ -157,8 +148,8 @@ def write_src_file(filename, data):
 
 if __name__ == "__main__":
     input_filename = "min_signals.json"
-    filename_h = "/Users/aboycandream/dev/project_1/project_1/can_messages/output/include/can_messages/CAN_min_signals.h"
-    filename_s = "/Users/aboycandream/dev/project_1/project_1/can_messages/output/src/min_signals.cpp"
+    filename_h = "output/src/min_signals.cpp"
+    filename_s = "output/src/min_signals.cpp"
     json_dict = {}
     with open(input_filename) as file_fd:
         json_raw_content = file_fd.read()

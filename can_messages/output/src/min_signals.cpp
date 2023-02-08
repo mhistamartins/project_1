@@ -1,4 +1,4 @@
-#include "../include/can_messages/CAN_min_signals.h"
+#include <can_messages/CAN_min_signals.h>
 #include <sstream>
 
 CAN_min_signals::CAN_min_signals() {
@@ -20,9 +20,8 @@ std::string CAN_min_signals::set_temperature(float newValue) {
 	sstream << "{\"ID\": " << m_temperatureGetMsgId
 			<< ", \"length\":10 "
 			<< ", \"value\":\""
-			<< ", \"value\":\""
 			<< newValue
-			<< "}";
+			<< "\"}";
 	return sstream.str();
 }
 std::string CAN_min_signals::get_humidity() {
@@ -37,8 +36,7 @@ std::string CAN_min_signals::set_humidity(uint8_t newValue) {
 	sstream << "{\"ID\": " << m_humidityGetMsgId
 			<< ", \"length\":7 "
 			<< ", \"value\":\""
-			<< ", \"value\":\""
 			<< newValue
-			<< "}";
+			<< "\"}";
 	return sstream.str();
 }
