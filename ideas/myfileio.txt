@@ -1,124 +1,97 @@
-project.cpp
-
 
 #include "project.h"
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <vector>
-#include <iterator>
+#include <stdexcept>
+#include <fstream>
 
-using namespace std;
-
-FileWork::FileWork(const std::string FileName) 
-{ m_fileName = FileName; }
-
-bool FileWork::open(bool to_write = false)
+File_IO::File_IO(std::string filename)
 {
-    bool status = false;
-    if(to_write)
+    m_filename = filename;
+}
+
+std::string File_IO::readLine()
+{
+    std::string content;
+
+    /* open file using m_filename variable*/
+    // read operation
+    // close file
+
+    return content;
+}
+
+std::vector<std::string> File_IO::readLines()
+{
+    std::vector<std::string> content;
+
+    const int buffer_size = 256;
+    std::ifstream input_stream(m_filename);
+    if (input_stream.is_open())
     {
-        // output stream
-        Files.open(FileName, ios::out); // optionally -> add a flag ios::app
-        if (Files.is_open())
+        while (input_stream.good())
         {
-            std::cout << "File is opened" << std::endl;
-            status = true;
+            char buffer[buffer_size] = {0};
+
+            input_stream.getline(buffer, buffer_size - 1);
+            content.emplace_back(buffer);
         }
     }
-    else
+
+    input_stream.close();
+
+    return content;
+}
+
+void File_IO::writeLine(std::string data_line)
+{
+    /* open file using m_filename variable*/
+
+    // write operation
+
+    // close file
+}
+
+void File_IO::writeLines(std::vector<std::string> data)
+{
+    std::ofstream output_stream(m_filename, std::ios::out);
+    if (output_stream.is_open())
     {
-        // input stream
-        File.open(FileName, ios::in);
-        if (File.is_open())
+        for (std::string eachLine : data)
         {
-            std::cout << "File is opened" << std::endl;
-            status = true;
+            output_stream << eachLine << std::endl;
         }
     }
-    return status;
-}
 
-void FileWork::func_write_line_string(const std::string &write)
-{
-    open(true);
-    Files << "writing this line of code to file" << std::endl;
+    output_stream.close();
+    // close file
 }
-
-std::string FileWork::func_read_line_string()
-{
-    open(false);
-    string data[1];
-    int num;
-    std::cout << "specify line of file:" << std::endl;
-    cin >> num;
-    for (int i = 0; i < num; i++)
-    {
-        getline(File, data[0]);
-    }
-    return data[0];
-}
-
-std::vector<std::string> FileWork::read_container()
-{
-    open(false);
-    std::vector<std::string> vec;
-    std::string str;
-    while (getline(File, str))
-    {
-        vec.push_back(str);
-    }
-    return vec;
-}
-
-void FileWork::write_container(const std::vector<std::string> &writecont)
-{
-    open(true);
-    for (const auto &write : writecont)
-    {
-        Files << write << std::endl;
-    }
-}
-
-void FileWork::close()
-{
-    File.close();
-    Files.close();
-}
-
 .....................................
 
 project.header
 
 
-#ifndef PROJECT_H
-#define PROJECT_H
-#include <iostream>
+
+
+#ifndef FILE_IO_H
+#define FILE_IO_H
+
 #include <string>
-#include <fstream>
 #include <vector>
 
-class FileWork
+class File_IO
 {
-private:
-    std::string FileName;
-    std::ofstream Files;
-    std::ifstream File;
-
 public:
-    explicit FileWork(const std::string &FileName);
+    explicit File_IO(std::string filename);
+    std::string readLine();
+    std::vector<std::string> readLines();
+    void writeLine(std::string data_line);
+    void writeLines(std::vector<std::string> data);
 
-    bool open(bool to_write);
-    void func_write_line_string(const std::string &write);
-    std::string func_read_line_string();
-    std::vector<std::string> read_container();
-    void write_container(const std::vector<std::string> &writecont);
-
-    void close();
-
-    ~FileWork() {}
+private:
+    std::string m_filename;
 };
-#endif
+
+#endif // FILE_IO_H
 
 .................................
 
@@ -268,4 +241,90 @@ int main(int argc, char *argv[])
     File_IO output(output_filename);
     output.writeLines(final_output);
     return 0;
+}
+
+
+#include "project.h"
+#include <can_messages/min_signals.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <iterator>
+using namespace std;
+
+// #define PRINT_DEBUG_LINE_INFO std::cout << __FUNCTION__ << " : " << __LINE__ << std::endl;
+
+std::string parse_get_func_and_call(std::string line)
+{
+    const std::string set_keyword("get");
+    std::string result;
+    size_t pos_of_get = line.find(set_keyword);
+    size_t pos_start_signal_name = pos_of_get + set_keyword.size() + 1;
+
+    size_t pos_of_separator = line.find(" ", pos_start_signal_name);
+    std::string signal_name = line.substr(pos_start_signal_name, pos_of_separator - pos_start_signal_name);
+
+    // windows: \r\n
+    // linus: \n
+    bool shall_delete = line[line.size() - 1] == '\r';
+    std::string value = line.substr(pos_of_separator + 1, line.length() - ((pos_of_separator + 1) + (shall_delete ? 1 : 0)));
+
+    std::cout << "signal_name = |" << signal_name << "| value |" << value << "|" << std::endl;
+
+    if (signal_name.compare("temperature") == 0)
+    {
+        CAN_min_signals signal_obj;
+        return "\t\t" + signal_obj.get_temperature();
+    }
+    else if (signal_name.compare("humidity") == 0)
+    {
+        CAN_min_signals signal_obj;
+        return "\t\t" + signal_obj.get_humidity();
+    }
+    return result;
+}
+
+// set volume 100
+std::string parse_set_func_and_call(std::string line)
+{
+    const std::string set_keyword("set");
+    std::string result;
+    size_t pos_of_set = line.find(set_keyword);
+    size_t pos_start_signal_name = pos_of_set + set_keyword.size() + 1;
+    // position of set plus the length of the "set" string plus extra whitespace
+    size_t pos_of_separator = line.find(" ", pos_start_signal_name);
+    std::string signal_name = line.substr(pos_start_signal_name, pos_of_separator - pos_start_signal_name);
+
+    // ignore space we use +1
+    // starting from the first symbol after
+    // from total length -(position of first element + last element)
+    std::string value = line.substr(pos_of_separator + 1);
+
+    std::cout << "signal_name = |" << signal_name << "| value = |" << value << "|" << std::endl;
+
+    if (signal_name.compare("temperature") == 0)
+    {
+        float f_value = std::stof(value);
+        CAN_min_signals signal_obj;
+        return "\t\t" + signal_obj.set_temperature(f_value);
+    }
+    else if (signal_name.compare("humidity") == 0)
+    {
+        uint8_t u_value = std::stoul(value) & 0xFF; // to take only the last byte so we use the & bitwise operator
+        CAN_min_signals signal_obj;
+        return "\t\t" + signal_obj.set_humidity(u_value);
+    }
+    // else if (signal_name.compare("stop_signal_light") == 0)
+    // {
+    //    bool b_value = false;
+    //   if (value.compare("enabled") == 0)
+    //   {
+    //      b_value = true;
+    //  }
+    // CAN_min_signals signal_obj;
+    //  return signal_obj.set_stop_signal_light(b_value);
+    // }
+
+    return result;
 }

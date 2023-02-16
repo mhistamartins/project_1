@@ -1,66 +1,83 @@
 #include "project.h"
-#include <vector>
-#include <stdexcept>
+#include <iostream>
 #include <fstream>
+#include <string>
+#include <vector>
+#include <iterator>
 
-File_IO::File_IO(std::string filename)
+using namespace std;
+
+FileWork::FileWork(const std::string &FileName) : FileName(FileName) {}
+
+bool FileWork::open(bool to_write = false)
 {
-    m_filename = filename;
-}
-
-std::string File_IO::readLine()
-{
-    std::string content;
-
-    /* open file using m_filename variable*/
-    // read operation
-    // close file
-
-    return content;
-}
-
-std::vector<std::string> File_IO::readLines()
-{
-    std::vector<std::string> content;
-
-    const int buffer_size = 256;
-    std::ifstream input_stream(m_filename);
-    if (input_stream.is_open())
+    bool status = false;
+    if (to_write)
     {
-        while (input_stream.good())
+        // output stream
+        Files.open(FileName, ios::out); // optionally -> add a flag ios::app
+        if (Files.is_open())
         {
-            char buffer[buffer_size] = {0};
-
-            input_stream.getline(buffer, buffer_size - 1);
-            content.emplace_back(buffer);
+            std::cout << "File is opened" << std::endl;
+            status = true;
         }
     }
-
-    input_stream.close();
-
-    return content;
-}
-
-void File_IO::writeLine(std::string data_line)
-{
-    /* open file using m_filename variable*/
-
-    // write operation
-
-    // close file
-}
-
-void File_IO::writeLines(std::vector<std::string> data)
-{
-    std::ofstream output_stream(m_filename, std::ios::out);
-    if (output_stream.is_open())
+    else
     {
-        for (std::string eachLine : data)
+        // input stream
+        File.open(FileName, ios::in);
+        if (File.is_open())
         {
-            output_stream << eachLine << std::endl;
+            std::cout << "File is opened" << std::endl;
+            status = true;
         }
     }
+    return status;
+}
 
-    output_stream.close();
-    // close file
+void FileWork::func_write_line_string(const std::string &write)
+{
+    open(true);
+    Files << "writing this line of code to file" << std::endl;
+}
+
+std::string FileWork::func_read_line_string()
+{
+    open(false);
+    string data[1];
+    int num;
+    std::cout << "specify line of file:" << std::endl;
+    cin >> num;
+    for (int i = 0; i < num; i++)
+    {
+        getline(File, data[0]);
+    }
+    return data[0];
+}
+
+std::vector<std::string> FileWork::read_container()
+{
+    open(false);
+    std::vector<std::string> vec;
+    std::string str;
+    while (getline(File, str))
+    {
+        vec.push_back(str);
+    }
+    return vec;
+}
+
+void FileWork::write_container(const std::vector<std::string> &writecont)
+{
+    open(true);
+    for (const auto &write : writecont)
+    {
+        Files << write << std::endl;
+    }
+}
+
+void FileWork::close()
+{
+    File.close();
+    Files.close();
 }

@@ -147,8 +147,8 @@ def write_src_file(filename, data):
 
 
 if __name__ == "__main__":
-    input_filename = "min_signals.json"
-    filename_h = "output/src/min_signals.cpp"
+    input_filename = "signals_biglist.json"
+    filename_h = "output/include/can_messages/CAN_signals_biglist.h"
     filename_s = "output/src/min_signals.cpp"
     json_dict = {}
     with open(input_filename) as file_fd:
